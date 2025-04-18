@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.app-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;
+    margin-left: 240px;
+    padding: 2rem;
+    background-color: rgb(58, 57, 57);
+    min-height: 100vh;
+  }
+  
+  .page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .dashboard-header {
+    background: #4f4c4c; 
+    height: 60px;     
+    position: fixed;
+    top:0;
+    left: 240px;
+    right:0;
+    width: 100;
+    z-index: 1000;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+  }
+  
+
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.amount-negative {
+  color: #e53e3e;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.progress-container {
+  position: relative;
+  height: 6px;
+  background-color: #f0f2f5;
+  border-radius: 3px;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #e53e3e;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.percentage-text {
+  margin-top: 0.5rem;
+  color: #718096;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.chart-tooltip {
+  position: absolute;
+  background: #2d3748;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+}
+
