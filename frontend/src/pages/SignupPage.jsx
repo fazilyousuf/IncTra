@@ -9,7 +9,7 @@ const SignupPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:8000/api/signup/', {
+      const response = await fetch('http://localhost:8000/users/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,11 +39,11 @@ const SignupPage = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="login-form">
           <div className="input-group">
-            <label className="label">Name</label>
+            <label className="label">Username</label>
             <input
               type="text"
-              placeholder="John Doe"
-              {...register("name", { required: "Name is required" })}
+              placeholder="JohnDoe"
+              {...register("username", { required: "Name is required" })}
               className="input"
             />
             {errors.name && <span className="error">{errors.name.message}</span>}
@@ -53,7 +53,7 @@ const SignupPage = () => {
             <label className="label">Email</label>
             <input
               type="email"
-              placeholder="johndoe@gmail.com"
+              placeholder="example@gmail.com"
               {...register("email", { required: "Email is required" })}
               className="input"
             />

@@ -328,6 +328,7 @@ const CreditCardItem = ({ cardName, usedAmount, limit }) => {
 
 
 const DashboardPage = () => {
+
     const [thisMonthData] = useState([
         { label: 'Income', value: 6500, color: '#008000' },
         { label: 'Expenses', value: 4200, color: '#e53e3e' }
@@ -339,6 +340,13 @@ const DashboardPage = () => {
     ]);
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+      if (!localStorage.getItem('token')){
+        navigate('/auth')
+      }
+
+    })
 
     const handleContainerClick = (path) => {
         navigate(path);

@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:8000/api/login/', {
+      const response = await fetch('http://localhost:8000/users/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,6 +20,7 @@ const LoginPage = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("Login successful:", result);
+        localStorage.setItem('token',result.access)
         navigate('/');
       } else {
         alert("Invalid email or password");
@@ -38,14 +39,13 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit(onSubmit)} className="login-form">
           <div className="input-group">
-            <label className="label">Email</label>
+            <label className="label">Username</label>
             <input
-              type="email"
-              defaultValue="johndoe@gmail.com"
-              {...register("email", { required: "Email is required" })}
+              type="text"
+              {...register("username", { required: "username is required" })}
               className="input"
             />
-            {errors.email && <span className="error">{errors.email.message}</span>}
+            {errors.username && <span className="error">{errors.username.message}</span>}
           </div>
 
           <div className="input-group">
