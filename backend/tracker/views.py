@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .models import Account, Category, Transaction,Budget
-from .serializers import AccountSerializer, CategorySerializer, TransactionSerializer, BudgetSerializer
+from .models import Account, Category, Transaction
+from .serializers import AccountSerializer, CategorySerializer, TransactionSerializer
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -13,10 +14,12 @@ class AccountViewSet(viewsets.ModelViewSet):
         # Show only the current user's accounts
         return Account.objects.filter(user=self.request.user)
 
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     # Optional: Add permissions if categories are user-specific
+
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
@@ -24,16 +27,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Show only the current user's transactions
-        return Transaction.objects.filter(user=self.request.user)   
-    
-
-class BudgetViewSet(viewsets.ModelViewSet):
-    serializer_class = BudgetSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Budget.objects.filter(user=self.request.user)
+        return Transaction.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

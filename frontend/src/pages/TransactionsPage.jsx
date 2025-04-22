@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/TransactionPage.css";
 
-const TransactionItem = ({ category, amount, date, type, accountType }) => (
+const TransactionItem = ({ category, amount, date, transaction_type }) => (
   <div className="transaction-item">
     <div className="transaction-item-category">
       <span>{category}</span>
     </div>
     <div className="transaction-item-details">
-      <div className={`transaction-amount ${type}`}>
-        {type === "income" ? "+" : "-"}${Math.abs(amount).toFixed(2)}
+      <div className={`transaction-amount ${amount > 0 ? "" : "expense"}`}>
+        {amount}
       </div>
       <div className="transaction-meta">
         <span className="transaction-date">
@@ -18,7 +18,6 @@ const TransactionItem = ({ category, amount, date, type, accountType }) => (
             year: "numeric",
           })}
         </span>
-        <span className="transaction-account">{accountType}</span>
       </div>
     </div>
   </div>
@@ -31,49 +30,112 @@ const TransactionsPage = () => {
     category: "",
     amount: "",
     date: "",
-    type: "expense",
+    type: "income",
     accountType: "Bank Account",
   });
 
-  const incomeCategories = ["Salary", "Investment", "Assets", "Business", "Others"];
-  const expenseCategories = ["Credit Card Bill","Food", "Home", "Transportation", "Entertainment", "Shopping", "Others"];
+  const incomeCategories = [
+    "Salary",
+    "Investment",
+    "Assets",
+    "Business",
+    "Others",
+  ];
+  const expenseCategories = [
+    "Credit Card Bill",
+    "Food",
+    "Home",
+    "Transportation",
+    "Entertainment",
+    "Shopping",
+    "Others",
+  ];
 
-  const handleAddTransaction = () => {
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          "http://localhost:8000/tracker/transactions/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setTransactions(data);
+        }
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const handleAddTransaction = async () => {
     if (
       newTransaction.category &&
       newTransaction.amount &&
       newTransaction.date &&
-      newTransaction.accountType
+      newTransaction.accountType &&
+      newTransaction.type
     ) {
-      setTransactions([
-        ...transactions,
-        {
-          id: transactions.length + 1,
-          ...newTransaction,
-          amount: parseFloat(newTransaction.amount),
-        },
-      ]);
-      setShowAddModal(false);
-      setNewTransaction({
-        category: "",
-        amount: "",
-        date: "",
-        type: "expense",
-        accountType: "Bank Account",
-      });
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await fetch(
+          "http://localhost:8000/tracker/transactions/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              category: newTransaction.category,
+              amount: parseFloat(newTransaction.amount),
+              date: newTransaction.date,
+              transaction_type: newTransaction.type === "income" ? "IN" : "EX",
+              account_type:
+                newTransaction.accountType === "Bank Account"
+                  ? "bank"
+                  : "credit",
+              description: "",
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (response.ok) {
+          setTransactions([...transactions, data]);
+          setShowAddModal(false);
+          setNewTransaction({
+            category: "",
+            amount: "",
+            date: "",
+            type: "income",
+            accountType: "Bank Account",
+          });
+        }
+      } catch (error) {
+        console.error("API error:", error);
+      }
     }
   };
 
   const totalAmount = transactions.reduce((sum, transaction) => {
-    return transaction.type === "income"
-      ? sum + transaction.amount
-      : sum - transaction.amount;
+    return transaction.transaction_type === "IN"
+      ? sum + parseFloat(transaction.amount)
+      : sum - parseFloat(transaction.amount);
   }, 0);
 
   return (
     <div className="main-content1">
       <div className="dashboard-header">
-        <h3 style={{ color: '#ffff', paddingLeft: '30px' }}>Transactions</h3>
+        <h3 style={{ color: "#ffff", paddingLeft: "30px" }}>Transactions</h3>
         <div className="floating-buttons-container">
           <button
             className="floating-button add"
@@ -113,25 +175,30 @@ const TransactionsPage = () => {
           <div className="transactions-header">
             <div className="transactions-title">
               <span>Transactions</span>
-              <span className="transactions-count">({transactions.length})</span>
+              <span className="transactions-count">
+                ({transactions.length})
+              </span>
             </div>
             <div className="total-amount">
               <span>Total:</span>
-              <span className={`total-value ${totalAmount >= 0 ? "positive" : "negative"}`}>
+              <span
+                className={`total-value ${
+                  totalAmount >= 0 ? "positive" : "negative"
+                }`}
+              >
                 ${Math.abs(totalAmount).toFixed(2)}
               </span>
             </div>
           </div>
 
           <div className="transactions-list">
-            {transactions.map((transaction) => (
+            {transactions.map((transaction, index) => (
               <TransactionItem
-                key={transaction.id}
+                key={index}
                 category={transaction.category}
                 amount={transaction.amount}
                 date={transaction.date}
-                type={transaction.type}
-                accountType={transaction.accountType}
+                transaction_type={transaction.transaction_type}
               />
             ))}
           </div>
@@ -141,7 +208,9 @@ const TransactionsPage = () => {
       {showAddModal && (
         <div className="add-modal-overlay">
           <div className="add-modal-content">
-            <h3>Add {newTransaction.type === "income" ? "Income" : "Expense"}</h3>
+            <h3>
+              Add {newTransaction.type === "income" ? "Income" : "Expense"}
+            </h3>
             <div className="modal-input-group">
               <select
                 className="modal-input"
@@ -154,9 +223,16 @@ const TransactionsPage = () => {
                 }
                 required
               >
-                <option value="" disabled>Select a category</option>
-                {(newTransaction.type === "income" ? incomeCategories : expenseCategories).map((category) => (
-                  <option key={category} value={category}>{category}</option>
+                <option value="" disabled>
+                  Select a category
+                </option>
+                {(newTransaction.type === "income"
+                  ? incomeCategories
+                  : expenseCategories
+                ).map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
                 ))}
               </select>
             </div>
