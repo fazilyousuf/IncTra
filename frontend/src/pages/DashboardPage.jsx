@@ -341,12 +341,7 @@ const DashboardPage = () => {
 
     const navigate = useNavigate();
 
-    useEffect(()=>{
-      if (!localStorage.getItem('token')){
-        navigate('/auth')
-      }
-
-    })
+    
 
     const handleContainerClick = (path) => {
         navigate(path);

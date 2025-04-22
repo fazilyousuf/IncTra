@@ -4,7 +4,7 @@ import DashboardPage from "../pages/DashboardPage";
 import TransactionsPage from "../pages/TransactionsPage";
 import AccountsPage from "../pages/AccountsPage";
 import BudgetsPage from "../pages/BudgetsPage";
-import SettingsPage from "../pages/SettingsPage";
+import SignoutPage from "../pages/SignoutPage";
 import Mainlayout from "../layouts/Mainlayout";
 import LoginPage from "../pages/LoginPage";
 import AuthLayout from "../layouts/AuthLayout";
@@ -30,8 +30,8 @@ export const router = createBrowserRouter([
                 path:'budgets',
                 element:<BudgetsPage/>
             },{
-                path:'settings',
-                element:<SettingsPage/>
+                path:'signout',
+                element:<SignoutPage/>
             },
 
         ]

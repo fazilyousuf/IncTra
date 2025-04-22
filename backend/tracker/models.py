@@ -35,3 +35,23 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=2, choices=TRANSACTION_TYPE_CHOICES)
 
     # Keep existing methods (save/delete logic)
+from django.contrib.auth.models import User
+CATEGORY_CHOICES = [
+    ('Food', 'Food'),
+    ('Entertainment', 'Entertainment'),
+    ('Transportation', 'Transportation'),
+    ('Health', 'Health'),
+    ('Shopping', 'Shopping'),
+    ('Home', 'Home'),
+    ('Others', 'Others'),
+]
+
+class Budget(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    allocated_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'category')
+

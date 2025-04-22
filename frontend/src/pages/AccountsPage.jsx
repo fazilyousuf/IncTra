@@ -93,24 +93,25 @@ const AccountsPage = () => {
     };
 
     return (
-        <div className="main-content">
+        <div className="main-content1">
       <div className="dashboard-header">
         <h3 style={{ color: '#ffff', paddingLeft: '30px' }}>Accounts</h3>
       </div>
 
-      <div className="page-container" style={{ padding: '20px' }}>
+      <div className="page-container" style={{ padding: '0px' }}>
         {/* Bank Accounts Section */}
         <div style={{ 
           backgroundColor: '#2D2D2D',
           borderRadius: '8px',
           padding: '20px',
-          marginBottom: '20px'
+          marginBottom: '20px',
         }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
             marginBottom: '15px'
+            
           }}>
             <h4 style={{ color: 'white' }}>Bank Accounts</h4>
             <button 

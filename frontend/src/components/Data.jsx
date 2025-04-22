@@ -15,7 +15,7 @@ export const navbarData = [{
     path:"/budgets" ,
 },
 {
-    title:'Settings',
-    path:"/settings",
+    title:'Signout',
+    path:"/signout",
 },
 ]
