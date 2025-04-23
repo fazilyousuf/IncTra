@@ -42,7 +42,6 @@ const BudgetsPage = () => {
           food: data.food,
           entertainment: data.entertainment,
           transportation: data.transportation,
-          health: data.health,
           shopping: data.shopping,
           home: data.home,
           others: data.others,
@@ -51,7 +50,6 @@ const BudgetsPage = () => {
           Number(data.food) +
           Number(data.entertainment) +
           Number(data.transportation) +
-          Number(data.health) +
           Number(data.shopping) +
           Number(data.home) +
           Number(data.others);

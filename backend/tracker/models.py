@@ -11,7 +11,6 @@ class Account(models.Model):
     food = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     entertainment = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     transportation = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    health = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     shopping = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     home = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     others = models.DecimalField(max_digits=12, decimal_places=2, default=0)

@@ -42,7 +42,6 @@ const TransactionsPage = () => {
     "Others",
   ];
   const expenseCategories = [
-    "Credit Card Bill",
     "Food",
     "Home",
     "Transportation",
